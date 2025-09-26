@@ -141,7 +141,7 @@ $student_notices = $stmt->fetchAll();
         <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
             <div class="p-6 flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
                 <div class="flex-shrink-0">
-                    <img src="<?php echo !empty($student['image']) ? '../public/uploads/'.$student['image'] : '../assets/images/mypic3.jpg'; ?>" 
+                    <img src="<?php echo !empty($student['image']) ? '../uploads/students/'.$student['image'] : '../assets/images/mypic3.jpg'; ?>" 
                          alt="Student Image" 
                          class="h-32 w-32 rounded-full object-cover border-4 border-primary-100">
                 </div>
