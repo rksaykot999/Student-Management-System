@@ -1,3 +1,129 @@
+<?php
+// public/teacher_register.php
+include_once '../includes/db.php';
+session_start();
+
+$errors = [];
+$success = '';
+
+// make PDO throw exceptions (helps debugging)
+if (isset($pdo)) {
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // sanitize inputs
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+    $phone = trim($_POST['phone'] ?? '');
+    $department = trim($_POST['department'] ?? '');
+    $shift = trim($_POST['shift'] ?? '');
+    // read designation from form (you had this field in the HTML)
+    $designation = trim($_POST['designation'] ?? '');
+    // qualification may be multiple-select; normalize to comma string
+    if (isset($_POST['qualification']) && is_array($_POST['qualification'])) {
+        $qualification = implode(',', array_map('trim', $_POST['qualification']));
+    } else {
+        $qualification = trim($_POST['qualification'] ?? '');
+    }
+
+    // basic validation
+    if ($name === '' || $email === '' || $password === '') {
+        $errors[] = "Name, Email এবং Password অবশ্যই দিতে হবে।";
+    } else {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "সঠিক ইমেইল ঠিকানা দিন।";
+        }
+    }
+
+    // duplicate checks (optional)
+    if (empty($errors)) {
+        try {
+            $chk = $pdo->prepare("SELECT COUNT(*) FROM teachers WHERE email = ?");
+            $chk->execute([$email]);
+            if ($chk->fetchColumn() > 0) {
+                $errors[] = "এই ইমেইল already registered as teacher।";
+            }
+
+            $chk2 = $pdo->prepare("SELECT COUNT(*) FROM pending_teachers WHERE email = ?");
+            $chk2->execute([$email]);
+            if ($chk2->fetchColumn() > 0) {
+                $errors[] = "তুমি আগেই রেজিস্টার করেছো — সেটা pending আছে।";
+            }
+        } catch (PDOException $e) {
+            $errors[] = "Database check error: " . $e->getMessage();
+        }
+    }
+
+    // image upload (same as before)
+    $allowed_ext = ['jpg', 'jpeg', 'png', 'gif'];
+    $max_size = 2 * 1024 * 1024; // 2MB
+    $image_name = null;
+
+    if (empty($errors) && !empty($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $f = $_FILES['image'];
+        if ($f['error'] !== UPLOAD_ERR_OK) {
+            $errors[] = "ছবির আপলোডে সমস্যা।";
+        } else {
+            if ($f['size'] > $max_size) $errors[] = "ছবির সাইজ 2MB এর বেশি হতে পারবে না।";
+            $ext = strtolower(pathinfo($f['name'], PATHINFO_EXTENSION));
+            if (!in_array($ext, $allowed_ext)) $errors[] = "ছবির অনুমোদিত ফরম্যাট: jpg, jpeg, png, gif।";
+
+            if (empty($errors)) {
+                $image_name = 'tch_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $ext;
+                $dest_dir = __DIR__ . '/../uploads/teachers/';
+                if (!is_dir($dest_dir)) {
+                    if (!mkdir($dest_dir, 0777, true)) {
+                        $errors[] = "ইমেজ আপলোড ডিরেক্টরি তৈরি করা যায়নি।";
+                    }
+                }
+                if (empty($errors)) {
+                    $dest = $dest_dir . $image_name;
+                    if (!move_uploaded_file($f['tmp_name'], $dest)) {
+                        $errors[] = "ছবি সার্ভারে সেভ করা যায়নি।";
+                    }
+                }
+            }
+        }
+    }
+
+    // Insert into pending_teachers (now includes designation)
+    if (empty($errors)) {
+        try {
+            $ins = $pdo->prepare("INSERT INTO pending_teachers
+                (name, email, password, department, shift, phone, qualification, designation, image, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
+
+            $ok = $ins->execute([
+                $name,
+                $email,
+                $password,      // তুমি চাওলে এখানে password_hash() ব্যবহার করো
+                $department,
+                $shift,
+                $phone,
+                $qualification,
+                $designation,
+                $image_name
+            ]);
+
+            if ($ok) {
+                $success = "Registration জমা হয়েছে — Admin পরবর্তী যাচাই করে Approve করবে।";
+                $_POST = [];
+            } else {
+                $info = $ins->errorInfo();
+                $errors[] = "Insert failed: " . ($info[2] ?? 'Unknown error');
+            }
+        } catch (PDOException $e) {
+            $errors[] = "Database Error: " . $e->getMessage();
+        }
+    }
+}
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -475,14 +601,14 @@
                   <label class="form-label">Department</label>
                   <input name="department" class="form-control" id="department" list="departmentOptions">
                   <datalist id="departmentOptions">
-                    <option value="Computer Science">
-                    <option value="Mathematics">
-                    <option value="Physics">
-                    <option value="Chemistry">
-                    <option value="Biology">
-                    <option value="English">
-                    <option value="History">
-                    <option value="Economics">
+                    <option value="CT">
+                    <option value="ET">
+                    <option value="CST">
+                    <option value="MT">
+                    <option value="ENT">
+                    <option value="PT">
+                    <option value="EMT">
+                    <option value="THT">
                   </datalist>
                 </div>
                 <div class="col-md-6">
@@ -508,11 +634,12 @@
                   <label class="form-label">Designation</label>
                   <select name="designation" class="form-select" id="designation">
                     <option value="">Select Designation</option>
-                    <option value="Professor">Professor</option>
-                    <option value="Associate Professor">Associate Professor</option>
-                    <option value="Assistant Professor">Assistant Professor</option>
-                    <option value="Lecturer">Lecturer</option>
+                    <option value="Principle">Principle</option>
+                    <option value="Vice Principle">Vice Principle</option>
+                    <option value="Chief Instructor & Head of the Department">Chief Instructor & Head of the Department</option>
                     <option value="Instructor">Instructor</option>
+                    <option value="Workhop Super">Workhop Super</option>
+                    <option value="Junior Instructor">Junior Instructor</option>
                   </select>
                 </div>
                 <div class="col-12">
@@ -632,317 +759,246 @@
   <!-- End Footer -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    const loginButton = document.getElementById('logoButton');
-    const loginDropdown = document.getElementById('loginDropdown');
-    const mobileMenuButton = document.getElementById('menuButton');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileLoginButton = document.getElementById('mobileLoginButton');
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // short helper
+  const $ = id => document.getElementById(id);
 
-    // Desktop login dropdown
-    if (loginButton) {
-      loginButton.addEventListener('click', (e) => {
-        loginDropdown.classList.toggle('show');
-        e.stopPropagation();
-      });
-    }
+  // Top UI (login/mobile) guards
+  const loginButton = $('logoButton');
+  const loginDropdown = $('loginDropdown');
+  const mobileMenuButton = $('menuButton');
+  const mobileMenu = $('mobileMenu');
+  const mobileLoginButton = $('mobileLoginButton');
 
-    // Hide dropdown when clicking outside
+  if (loginButton && loginDropdown) {
+    loginButton.addEventListener('click', (e) => {
+      loginDropdown.classList.toggle('show');
+      e.stopPropagation();
+    });
     window.addEventListener('click', (e) => {
       if (!loginDropdown.contains(e.target) && !loginButton.contains(e.target)) {
         loginDropdown.classList.remove('show');
       }
     });
+  }
+  if (mobileMenuButton && mobileMenu) {
+    mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('show'));
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('show')));
+  }
+  if (mobileLoginButton && loginDropdown) {
+    mobileLoginButton.addEventListener('click', (e) => { e.preventDefault(); loginDropdown.classList.toggle('show'); });
+  }
 
-    // Toggle mobile menu
-    mobileMenuButton.addEventListener('click', () => {
-      mobileMenu.classList.toggle('show');
+  // Multi-step form elements (teacher HTML uses 'next-step' / 'prev-step' / 'step' / 'form-section' ids)
+  const steps = document.querySelectorAll('.step');
+  const sections = document.querySelectorAll('.form-section');
+  const nextButtons = document.querySelectorAll('.next-step');
+  const prevButtons = document.querySelectorAll('.prev-step');
+
+  // initialize: show first section if none active
+  if (sections.length) {
+    let anyActive = Array.from(sections).some(s => s.classList.contains('active'));
+    if (!anyActive) sections[0].classList.add('active');
+  }
+  if (steps.length) {
+    let anyActiveStep = Array.from(steps).some(s => s.classList.contains('active'));
+    if (!anyActiveStep) steps[0].classList.add('active');
+  }
+
+  // Validate step (only step 1 required here)
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function showMessage(msg, type='danger') {
+    const container = $('messageContainer');
+    if (!container) return;
+    const cls = (type === 'danger') ? 'alert-danger' : 'alert-success';
+    container.innerHTML = `<div class="alert ${cls} alert-dismissible fade show" role="alert">
+      ${msg}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>`;
+  }
+
+  function validateStep(step) {
+    // step can be string/number
+    const s = String(step);
+    if (s === '1') {
+      const name = $('name') ? $('name').value.trim() : '';
+      const email = $('email') ? $('email').value.trim() : '';
+      const password = $('password') ? $('password').value : '';
+      if (!name) { showMessage('Please enter your full name','danger'); return false; }
+      if (!email) { showMessage('Please enter your email address','danger'); return false; }
+      if (!isValidEmail(email)) { showMessage('Please enter a valid email address','danger'); return false; }
+      if (!password) { showMessage('Please enter a password','danger'); return false; }
+      if (password.length < 6) { showMessage('Password must be at least 6 characters','danger'); return false; }
+    }
+    // other steps can have additional checks if needed
+    return true;
+  }
+
+  // Change step helper
+  function goToStep(targetStep) {
+    // hide all sections, show matching id 'stepX'
+    sections.forEach(sec => sec.classList.toggle('active', sec.id === 'step' + targetStep));
+    steps.forEach(st => {
+      const ds = st.getAttribute('data-step');
+      st.classList.toggle('active', ds === String(targetStep));
+      st.classList.toggle('completed', Number(ds) < Number(targetStep));
     });
+    // scroll to form top
+    const body = document.querySelector('.card-body') || document.querySelector('.registration-body') || document.body;
+    if (body) body.scrollIntoView({behavior:'smooth', block:'start'});
+  }
 
-    // Mobile login dropdown toggle
-    mobileLoginButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      loginDropdown.classList.toggle('show');
+  // Next buttons
+  nextButtons.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      const next = this.getAttribute('data-next');
+      // find current active step (from .step.active)
+      const currentStepEl = document.querySelector('.step.active');
+      const current = currentStepEl ? currentStepEl.getAttribute('data-step') : '1';
+      if (validateStep(current)) {
+        // if next is '3' (review), update review fields first
+        if (String(next) === '3') updateReviewSection();
+        goToStep(next);
+      }
     });
+  });
 
-    // Hide mobile menu on link click
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('show');
-      });
+  // Prev buttons
+  prevButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const prev = this.getAttribute('data-prev');
+      goToStep(prev);
     });
-    document.addEventListener('DOMContentLoaded', function() {
-      // Step navigation
-      const steps = document.querySelectorAll('.step');
-      const formSections = document.querySelectorAll('.form-section');
-      const nextButtons = document.querySelectorAll('.next-step');
-      const prevButtons = document.querySelectorAll('.prev-step');
+  });
 
-      nextButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const currentStep = document.querySelector('.step.active').getAttribute('data-step');
-          const nextStep = this.getAttribute('data-next');
+  // Image upload preview
+  const uploadArea = $('uploadArea');
+  const imageInput = $('tchImage');
+  const previewImg = $('tchPreview');
+  if (uploadArea && imageInput) {
+    uploadArea.addEventListener('click', () => imageInput.click());
+  }
+  if (imageInput) {
+    imageInput.addEventListener('change', function(e){
+      const f = e.target.files && e.target.files[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = function(ev){
+        if (previewImg) {
+          previewImg.src = ev.target.result;
+          previewImg.classList.remove('d-none');
+        }
+        const p = uploadArea ? uploadArea.querySelector('p') : null;
+        if (p) p.textContent = 'Click to change photo';
+      };
+      reader.readAsDataURL(f);
+    });
+  }
 
-          // Validate current step before proceeding
-          if (validateStep(currentStep)) {
-            // Update step indicator
-            steps.forEach(step => {
-              if (step.getAttribute('data-step') === nextStep) {
-                step.classList.add('active');
-              } else {
-                step.classList.remove('active');
-              }
-            });
+  // Password strength & toggle
+  const passwordInput = $('password');
+  const strengthBar = $('passwordStrength');
+  const strengthText = $('passwordText');
+  const togglePassword = $('togglePassword');
 
-            // Update form sections
-            formSections.forEach(section => {
-              if (section.id === 'step' + nextStep) {
-                section.classList.add('active');
-              } else {
-                section.classList.remove('active');
-              }
-            });
+  if (passwordInput && strengthBar && strengthText) {
+    passwordInput.addEventListener('input', function(){
+      const pwd = this.value || '';
+      let score = 0;
+      if (pwd.length >= 8) score++;
+      if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) score++;
+      if (/\d/.test(pwd)) score++;
+      if (/[^a-zA-Z\d]/.test(pwd)) score++;
+      strengthBar.className = 'password-strength';
+      if (pwd.length === 0) { strengthText.textContent = 'Not set'; }
+      else if (score <= 1) { strengthBar.classList.add('strength-weak'); strengthText.textContent = 'Weak'; }
+      else if (score === 2) { strengthBar.classList.add('strength-fair'); strengthText.textContent = 'Fair'; }
+      else if (score === 3) { strengthBar.classList.add('strength-good'); strengthText.textContent = 'Good'; }
+      else { strengthBar.classList.add('strength-strong'); strengthText.textContent = 'Strong'; }
+    });
+  }
+  if (togglePassword && passwordInput) {
+    togglePassword.addEventListener('click', function(){
+      const t = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', t);
+      this.innerHTML = t === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+    });
+  }
 
-            // Update review section with current values
-            if (nextStep === '3') {
-              updateReviewSection();
-            }
-          }
+  // Update review section (step 3)
+  function updateReviewSection() {
+    const reviewName = $('reviewName'), reviewEmail = $('reviewEmail'), reviewPhone = $('reviewPhone');
+    const reviewDept = $('reviewDept'), reviewShift = $('reviewShift'), reviewQual = $('reviewQual'), reviewDesig = $('reviewDesig'), reviewPhoto = $('reviewPhoto');
+
+    if (reviewName && $('name')) reviewName.textContent = $('name').value || '';
+    if (reviewEmail && $('email')) reviewEmail.textContent = $('email').value || '';
+    if (reviewPhone && $('phone')) reviewPhone.textContent = $('phone').value || 'Not provided';
+    if (reviewDept && $('department')) reviewDept.textContent = $('department').value || 'Not provided';
+    if (reviewShift && $('shift')) reviewShift.textContent = $('shift').value || 'Not provided';
+    if (reviewQual && $('qualification')) {
+      const sel = Array.from($('qualification').selectedOptions || []).map(o => o.value);
+      reviewQual.textContent = sel.length ? sel.join(', ') : 'Not provided';
+    }
+    if (reviewDesig && $('designation')) reviewDesig.textContent = $('designation').value || 'Not provided';
+    if (reviewPhoto) {
+      if (previewImg && previewImg.src) reviewPhoto.innerHTML = `<img src="${previewImg.src}" class="preview-img">`;
+      else reviewPhoto.innerHTML = '<p class="text-muted">No photo selected</p>';
+    }
+  }
+  window.updateReviewSection = updateReviewSection; // expose if needed
+
+  // Department datalist filter (optional)
+  const departmentInput = $('department');
+  const departmentOptionsEl = $('departmentOptions');
+  if (departmentInput && departmentOptionsEl) {
+    departmentInput.addEventListener('input', function() {
+      const v = this.value.toLowerCase();
+      const all = ['Computer Science','Mathematics','Physics','Chemistry','Biology','English','History','Economics'];
+      if (v.length > 1) {
+        departmentOptionsEl.innerHTML = '';
+        all.filter(x => x.toLowerCase().includes(v)).forEach(x => {
+          const opt = document.createElement('option'); opt.value = x; departmentOptionsEl.appendChild(opt);
         });
-      });
-
-      prevButtons.forEach(button => {
-        button.addEventListener('click', function() {
-          const prevStep = this.getAttribute('data-prev');
-
-          // Update step indicator
-          steps.forEach(step => {
-            if (step.getAttribute('data-step') === prevStep) {
-              step.classList.add('active');
-            } else {
-              step.classList.remove('active');
-            }
-          });
-
-          // Update form sections
-          formSections.forEach(section => {
-            if (section.id === 'step' + prevStep) {
-              section.classList.add('active');
-            } else {
-              section.classList.remove('active');
-            }
-          });
-        });
-      });
-
-      // Image upload and preview
-      const uploadArea = document.getElementById('uploadArea');
-      const imageInput = document.getElementById('tchImage');
-      const previewImg = document.getElementById('tchPreview');
-
-      uploadArea.addEventListener('click', function() {
-        imageInput.click();
-      });
-
-      imageInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            previewImg.src = e.target.result;
-            previewImg.classList.remove('d-none');
-            uploadArea.querySelector('p').textContent = 'Click to change photo';
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
-      // Password strength indicator
-      const passwordInput = document.getElementById('password');
-      const strengthBar = document.getElementById('passwordStrength');
-      const strengthText = document.getElementById('passwordText');
-      const togglePassword = document.getElementById('togglePassword');
-
-      passwordInput.addEventListener('input', function() {
-        const password = this.value;
-        let strength = 0;
-
-        if (password.length >= 8) strength++;
-        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
-        if (password.match(/\d/)) strength++;
-        if (password.match(/[^a-zA-Z\d]/)) strength++;
-
-        // Reset classes
-        strengthBar.className = 'password-strength';
-
-        if (password.length === 0) {
-          strengthText.textContent = 'Not set';
-        } else if (strength <= 1) {
-          strengthBar.classList.add('strength-weak');
-          strengthText.textContent = 'Weak';
-        } else if (strength === 2) {
-          strengthBar.classList.add('strength-fair');
-          strengthText.textContent = 'Fair';
-        } else if (strength === 3) {
-          strengthBar.classList.add('strength-good');
-          strengthText.textContent = 'Good';
-        } else {
-          strengthBar.classList.add('strength-strong');
-          strengthText.textContent = 'Strong';
-        }
-      });
-
-      // Toggle password visibility
-      togglePassword.addEventListener('click', function() {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-      });
-
-      // Update review section with current form values
-      function updateReviewSection() {
-        document.getElementById('reviewName').textContent = document.getElementById('name').value;
-        document.getElementById('reviewEmail').textContent = document.getElementById('email').value;
-        document.getElementById('reviewPhone').textContent = document.getElementById('phone').value || 'Not provided';
-        document.getElementById('reviewDept').textContent = document.getElementById('department').value || 'Not provided';
-        document.getElementById('reviewShift').textContent = document.getElementById('shift').value || 'Not provided';
-
-        // Handle multiple qualifications
-        const qualificationSelect = document.getElementById('qualification');
-        const selectedQualifications = Array.from(qualificationSelect.selectedOptions).map(option => option.value);
-        document.getElementById('reviewQual').textContent = selectedQualifications.length > 0 ? selectedQualifications.join(', ') : 'Not provided';
-
-        document.getElementById('reviewDesig').textContent = document.getElementById('designation').value || 'Not provided';
-
-        // Handle photo preview in review section
-        const reviewPhoto = document.getElementById('reviewPhoto');
-        if (previewImg.src) {
-          reviewPhoto.innerHTML = `<img src="${previewImg.src}" class="preview-img">`;
-        } else {
-          reviewPhoto.innerHTML = '<p class="text-muted">No photo selected</p>';
-        }
       }
+    });
+  }
 
-      // Validate current step before proceeding
-      function validateStep(step) {
-        let isValid = true;
-        const messageContainer = document.getElementById('messageContainer');
-        messageContainer.innerHTML = '';
-
-        if (step === '1') {
-          const name = document.getElementById('name').value.trim();
-          const email = document.getElementById('email').value.trim();
-          const password = document.getElementById('password').value;
-
-          if (name === '') {
-            showMessage('Please enter your full name', 'danger');
-            isValid = false;
-          } else if (email === '') {
-            showMessage('Please enter your email address', 'danger');
-            isValid = false;
-          } else if (!isValidEmail(email)) {
-            showMessage('Please enter a valid email address', 'danger');
-            isValid = false;
-          } else if (password === '') {
-            showMessage('Please enter a password', 'danger');
-            isValid = false;
-          } else if (password.length < 6) {
-            showMessage('Password must be at least 6 characters long', 'danger');
-            isValid = false;
-          }
-        }
-
-        return isValid;
-      }
-
-      // Email validation
-      function isValidEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-      }
-
-      // Show message function
-      function showMessage(message, type) {
-        const messageContainer = document.getElementById('messageContainer');
-        const alertClass = type === 'danger' ? 'alert-danger' : 'alert-success';
-        messageContainer.innerHTML = `<div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-          ${message}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>`;
-      }
-
-      // Form submission validation
-      document.getElementById('registrationForm').addEventListener('submit', function(e) {
-        const agreeTerms = document.getElementById('agreeTerms');
-        if (!agreeTerms.checked) {
-          e.preventDefault();
-          showMessage('Please agree to the Terms of Service', 'danger');
-          // Scroll to terms checkbox
-          agreeTerms.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
-          });
-          return false;
-        }
-
-        // Simulate successful registration
+  // Final submit handler: only block if terms not agreed; otherwise allow normal POST
+  const form = $('registrationForm');
+  if (form) {
+    form.addEventListener('submit', function(e){
+      const agree = $('agreeTerms');
+      if (agree && !agree.checked) {
         e.preventDefault();
-        showMessage('Registration submitted successfully! Your account is pending admin approval.', 'success');
-
-        // Reset form after successful submission
-        setTimeout(() => {
-          document.getElementById('registrationForm').reset();
-          // Go back to step 1
-          steps.forEach(step => {
-            if (step.getAttribute('data-step') === '1') {
-              step.classList.add('active');
-            } else {
-              step.classList.remove('active');
-            }
-          });
-
-          formSections.forEach(section => {
-            if (section.id === 'step1') {
-              section.classList.add('active');
-            } else {
-              section.classList.remove('active');
-            }
-          });
-
-          // Reset preview image
-          previewImg.src = '';
-          previewImg.classList.add('d-none');
-          uploadArea.querySelector('p').textContent = 'Click to upload photo';
-        }, 2000);
-      });
-
-      // Department suggestions
-      const departmentInput = document.getElementById('department');
-      const departmentOptions = document.getElementById('departmentOptions').options;
-
-      departmentInput.addEventListener('input', function() {
-        const value = this.value.toLowerCase();
-        if (value.length > 1) {
-          // Filter and show matching options
-          let matches = [];
-          for (let i = 0; i < departmentOptions.length; i++) {
-            if (departmentOptions[i].value.toLowerCase().includes(value)) {
-              matches.push(departmentOptions[i].value);
-            }
-          }
-
-          // Update datalist with filtered options
-          const datalist = document.getElementById('departmentOptions');
-          datalist.innerHTML = '';
-          matches.forEach(match => {
-            const option = document.createElement('option');
-            option.value = match;
-            datalist.appendChild(option);
-          });
-        }
-      });
+        showMessage('Please agree to the Terms of Service', 'danger');
+        agree.scrollIntoView({behavior:'smooth', block:'center'});
+        return false;
+      }
+      // allow default submit to server (don't prevent)
+      const submitBtn = $('submitBtn');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+      }
     });
-  </script>
+  }
+
+  // remove 'is-invalid' on input
+  document.querySelectorAll('input, select, textarea').forEach(f => {
+    f.addEventListener('input', function(){
+      this.classList.remove('is-invalid');
+      const err = this.parentNode ? this.parentNode.querySelector('.invalid-feedback') : null;
+      if (err) err.remove();
+    });
+  });
+
+}); // DOMContentLoaded end
+</script>
+
 </body>
 
 </html>

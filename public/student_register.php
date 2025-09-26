@@ -499,34 +499,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <span class="input-group-text"><i class="fas fa-building"></i></span>
                     <select name="department" class="form-select">
                       <option value="">Select Department</option>
-                      <option value="Computer Technology" <?= (($_POST['department'] ?? '') == 'Computer Technology') ? 'selected' : '' ?>>Computer Technology</option>
-                      <option value="Civil Technology" <?= (($_POST['department'] ?? '') == 'Civil Technology') ? 'selected' : '' ?>>Civil Technology</option>
-                      <option value="Electrical Technology" <?= (($_POST['department'] ?? '') == 'Electrical Technology') ? 'selected' : '' ?>>Electrical Technology</option>
-                      <option value="Mechanical Technology" <?= (($_POST['department'] ?? '') == 'Mechanical Technology') ? 'selected' : '' ?>>Mechanical Technology</option>
-                      <option value="Electronics Technology" <?= (($_POST['department'] ?? '') == 'Electronics Technology') ? 'selected' : '' ?>>Electronics Technology</option>
-                      <option value="Power Technology" <?= (($_POST['department'] ?? '') == 'Power Technology') ? 'selected' : '' ?>>Power Technology</option>
+                      <option value="CT" <?= (($_POST['department'] ?? '') == 'CT') ? 'selected' : '' ?>>CT</option>
+                      <option value="ET" <?= (($_POST['department'] ?? '') == 'ET') ? 'selected' : '' ?>>ET</option>
+                      <option value="CST" <?= (($_POST['department'] ?? '') == 'CST') ? 'selected' : '' ?>>CST</option>
+                      <option value="MT" <?= (($_POST['department'] ?? '') == 'MT') ? 'selected' : '' ?>>MT</option>
+                      <option value="ENT" <?= (($_POST['department'] ?? '') == 'ENT') ? 'selected' : '' ?>>ENT</option>
+                      <option value="PT" <?= (($_POST['department'] ?? '') == 'PT') ? 'selected' : '' ?>>PT</option>
+                      <option value="EMT" <?= (($_POST['department'] ?? '') == 'EMT') ? 'selected' : '' ?>>EMT</option>
+                      <option value="THT" <?= (($_POST['department'] ?? '') == 'THT') ? 'selected' : '' ?>>THT</option>
                     </select>
                   </div>
                 </div>
 
-                <div class="col-md-6">
-                  <label class="form-label">Semester</label>
-                  <div class="input-group">
-                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                    <select name="semester" class="form-select">
-                      <option value="">Select Semester</option>
-                      <?php for ($i = 1; $i <= 8; $i++): ?>
-                        <option value="Semester <?= $i ?>" <?= (($_POST['semester'] ?? '') == "Semester $i") ? 'selected' : '' ?>>Semester <?= $i ?></option>
-                      <?php endfor; ?>
-                    </select>
-                  </div>
+                <?php
+// ছোট helper: সংখ্যা থেকে ordinal string বানাবে (1 => 1st, 2 => 2nd, 3 => 3rd, অন্যগুলো => nth)
+              function ordinal($n) {
+                  $n = intval($n);
+                  if ($n % 10 === 1 && $n !== 11) return $n . 'st';
+                  if ($n % 10 === 2 && $n !== 12) return $n . 'nd';
+                  if ($n % 10 === 3 && $n !== 13) return $n . 'rd';
+                  return $n . 'th';
+              }
+              ?>
+              <div class="col-md-6">
+                <label class="form-label">Semester</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                  <select name="semester" class="form-select">
+                    <option value="">Select Semester</option>
+                    <?php for ($i = 1; $i <= 8; $i++): 
+                      $ord = ordinal($i);
+                    ?>
+                      <option value="<?= htmlspecialchars($ord) ?>" <?= (($_POST['semester'] ?? '') == $ord) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($ord) ?>
+                      </option>
+                    <?php endfor; ?>
+                  </select>
                 </div>
+              </div>
+
 
                 <div class="col-md-6">
                   <label class="form-label">Session</label>
                   <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-clock"></i></span>
-                    <input type="text" name="session" class="form-control" placeholder="e.g., 2022-2023" value="<?= htmlspecialchars($_POST['session'] ?? '') ?>">
+                    <input type="text" name="session" class="form-control" placeholder="e.g., 22-23" value="<?= htmlspecialchars($_POST['session'] ?? '') ?>">
                   </div>
                 </div>
 
