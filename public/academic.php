@@ -219,7 +219,7 @@
   <!-- Mobile Menu -->
   <div id="mobileMenu" class="mobile-menu-container fixed top-16 left-0 w-full bg-white shadow-lg p-6 z-40 md:hidden">
     <a href="index.php" class="block py-2 text-gray-600 hover:text-blue-600">Home</a>
-    <a href="academic.php" class="block py-2 text-blue-600 font-semibold">Academics</a>
+    <a href="academic.php" class="block py-2 text-gray-600 hover:text-blue-600">Academics</a>
     <a href="department.php" class="block py-2 text-gray-600 hover:text-blue-600">Departments</a>
     <a href="notice.php" class="block py-2 text-gray-600 hover:text-blue-600">Notice</a>
     <a href="teachers.php" class="block py-2 text-gray-600 hover:text-blue-600">Teachers</a>

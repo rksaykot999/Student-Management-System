@@ -1,7 +1,10 @@
 <?php
-if (session_status() == PHP_SESSION_NONE)
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,17 +12,18 @@ if (session_status() == PHP_SESSION_NONE)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Management System</title>
-    
-    <!-- Use Tailwind CSS for rapid styling -->
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f0f4f8;
         }
+
         .dropdown-menu {
             display: none;
         }
@@ -96,7 +100,7 @@ if (session_status() == PHP_SESSION_NONE)
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="mobile-menu-container fixed top-16 left-0 w-full bg-white shadow-lg p-6 z-40 md:hidden">
         <a href="index.php" class="block py-2 text-gray-600 hover:text-blue-600">Home</a>
-        <a href="academic.php" class="block py-2 text-gray-600 font-semibold">Academics</a>
+        <a href="academic.php" class="block py-2 text-gray-600 hover:text-blue-600">Academics</a>
         <a href="department.php" class="block py-2 text-gray-600 hover:text-blue-600">Departments</a>
         <a href="notice.php" class="block py-2 text-gray-600 hover:text-blue-600">Notice</a>
         <a href="teachers.php" class="block py-2 text-gray-600 hover:text-blue-600">Teachers</a>
