@@ -10,7 +10,7 @@ if (session_status() == PHP_SESSION_NONE)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Departments</title>
-    
+
     <!-- Use Tailwind CSS for rapid styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -21,10 +21,12 @@ if (session_status() == PHP_SESSION_NONE)
             font-family: 'Roboto', sans-serif;
             background-color: #f0f4f8;
         }
+
         .header-hero {
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("Images/Hero.jpg") no-repeat center center;
             background-size: cover;
         }
+
         /* Mobile menu specific styling */
         .mobile-menu-container {
             transition: all 0.3s ease-in-out;
@@ -38,13 +40,16 @@ if (session_status() == PHP_SESSION_NONE)
             opacity: 1;
             pointer-events: auto;
         }
+
         /* Modal specific styling */
         .modal-overlay {
             background-color: rgba(0, 0, 0, 0.5);
         }
+
         .dropdown-menu {
             display: none;
         }
+
         .dropdown-menu.show {
             display: block;
         }
@@ -338,7 +343,7 @@ if (session_status() == PHP_SESSION_NONE)
                 <?php foreach ($departments as $dept) { ?>
                     <!-- Department Card -->
                     <div class="bg-gray-50 p-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer view-details-btn"
-                            data-short-name="<?= htmlspecialchars($dept['short_name']); ?>">
+                        data-short-name="<?= htmlspecialchars($dept['short_name']); ?>">
                         <div class="h-48 w-full rounded-lg mb-4 overflow-hidden flex items-center justify-center bg-gradient-to-br from-indigo-600 to-blue-500">
                             <!-- Dynamically set icon based on department -->
                             <i class="<?= htmlspecialchars($dept['icon']); ?> text-6xl text-white" aria-hidden="true"></i>
@@ -347,13 +352,12 @@ if (session_status() == PHP_SESSION_NONE)
                         <p class="text-gray-600 text-sm mb-4">
                             <?= htmlspecialchars($dept['description']); ?>
                         </p>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <span class="inline-block px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">Diploma</span>
-                                <span class="inline-block px-3 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">4 Years</span>
-                            </div>
-                            <button class="view-details-btn inline-block px-4 py-2 text-white font-semibold bg-blue-600 hover:bg-blue-700 rounded-full transition duration-300">View Details</button>
+
+                        <div class="flex items-center gap-3 justify-between">
+                            <span class="inline-block px-3 py-1 text-xs font-semibold bg-blue-100 text-blue-800 rounded-full">Diploma</span>
+                            <span class="inline-block px-3 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">4 Years</span>
                         </div>
+
                     </div>
                 <?php } ?>
             </div>
@@ -383,19 +387,24 @@ if (session_status() == PHP_SESSION_NONE)
     </main>
 
     <!-- Modal Pop-up -->
-    <div id="details-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-        <div class="modal-overlay absolute inset-0"></div>
-        <div class="bg-white rounded-2xl shadow-xl max-w-3xl w-full p-8 relative z-10 transform transition-transform duration-300 scale-95">
+    <div id="details-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <!-- Overlay -->
+        <div class="modal-overlay absolute inset-0 bg-black bg-opacity-50"></div>
+
+        <!-- Modal Content -->
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-3xl p-8 relative z-10 transform transition-transform duration-300 scale-95
+                max-h-[90vh] overflow-y-auto">
             <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
                 <i class="fas fa-times text-2xl"></i>
             </button>
+
             <div class="flex items-center gap-4 mb-6">
-                 <div class="w-16 h-16 rounded-full flex items-center justify-center bg-blue-600 text-white text-3xl">
+                <div class="w-16 h-16 rounded-full flex items-center justify-center bg-blue-600 text-white text-3xl">
                     <i id="modal-icon" class="fas fa-question"></i>
                 </div>
                 <h3 id="modal-title" class="text-3xl font-bold text-gray-800"></h3>
             </div>
-            
+
             <!-- About Section -->
             <h4 class="text-xl font-semibold text-gray-800 mt-4 mb-2">About the Program</h4>
             <p id="modal-about" class="text-gray-700 leading-relaxed mb-6"></p>
@@ -410,6 +419,7 @@ if (session_status() == PHP_SESSION_NONE)
         </div>
     </div>
 
+
     <!-- The footer file is commented out, as it is not provided -->
     <!-- <?php include_once '../includes/footer.php'; ?> -->
 
@@ -421,13 +431,13 @@ if (session_status() == PHP_SESSION_NONE)
         const mobileLoginButton = document.getElementById('mobileLoginButton');
 
         // Toggle the dropdown menu on button click
-        if(loginButton) {
+        if (loginButton) {
             loginButton.addEventListener('click', (event) => {
                 loginDropdown.classList.toggle('show');
                 event.stopPropagation();
             });
         }
-        
+
         // Hide the dropdown when clicking outside of it
         window.addEventListener('click', (event) => {
             if (!loginDropdown.contains(event.target) && loginButton && !loginButton.contains(event.target)) {
@@ -479,7 +489,7 @@ if (session_status() == PHP_SESSION_NONE)
                     modalTitle.textContent = department.name;
                     modalIcon.className = department.icon;
                     modalAbout.textContent = department.full_details;
-                    
+
                     // Populate curriculum highlights
                     modalCurriculum.innerHTML = ''; // Clear previous list
                     department.curriculum_highlights.forEach(item => {
@@ -515,7 +525,7 @@ if (session_status() == PHP_SESSION_NONE)
 
         closeModalBtn.addEventListener('click', closeModal);
         modalOverlay.addEventListener('click', closeModal);
-
     </script>
 </body>
+
 </html>
