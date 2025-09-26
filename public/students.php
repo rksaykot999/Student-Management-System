@@ -303,7 +303,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
 
                                 <!-- Profile Picture -->
                                 <?php if (!empty($student['image'])): ?>
-                                    <img src="uploads/<?php echo htmlspecialchars($student['image']); ?>"
+                                    <img src="../uploads/students/<?php echo htmlspecialchars($student['image']); ?>"
                                         alt="Profile Picture"
                                         class="w-12 h-12 rounded-full object-cover border-2 border-blue-400 shadow-sm">
                                 <?php else: ?>
