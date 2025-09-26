@@ -1,0 +1,174 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: linear-gradient(-45deg, #6a11cb, #2575fc, #f7971e, #ff4c4c);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* Container */
+.container {
+    background: rgba(255,255,255,0.95);
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    max-width: 1200px;
+    width: 100%;
+    transition: transform 0.3s;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+}
+
+/* Heading */
+h2 {
+    text-align: center;
+    color: #2575fc;
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+}
+
+/* Search form */
+form input {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    width: 70%;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+form input:focus {
+    border-color: #2575fc;
+    box-shadow: 0 0 10px rgba(37,117,252,0.3);
+    outline: none;
+}
+
+form button {
+    padding: 10px 20px;
+    border: none;
+    background: #2575fc;
+    color: #fff;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-left: 10px;
+}
+
+form button:hover {
+    background: #1a5ec8;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 25px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+table th {
+    background: #4a90e2;
+    color: #fff;
+    font-weight: 600;
+}
+
+table tbody tr {
+    transition: 0.3s;
+}
+
+table tbody tr:hover {
+    background: rgba(37,117,252,0.1);
+    transform: translateY(-2px);
+}
+
+/* Buttons inside table */
+button.edit {
+    padding: 5px 12px;
+    background: #f1c40f;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button.edit:hover {
+    background: #d4ac0d;
+    transform: translateY(-2px);
+}
+
+button.delete {
+    padding: 5px 12px;
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button.delete:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+table td img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* circle shape */
+    object-fit: cover;   /* image properly fit inside circle */
+    border: 2px solid #2575fc; /* optional colored border */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+table td img:hover {
+    transform: scale(1.2); /* zoom on hover */
+    box-shadow: 0 5px 15px rgba(37,117,252,0.4);
+}
+
+/* Back button */
+.back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #fff;
+    background: #e74c3c;
+    padding: 10px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.back-btn:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media(max-width: 768px){
+    form input { width: 100%; margin-bottom: 10px; }
+    form button { width: 100%; margin-left: 0; }
+    table th, table td { font-size: 14px; padding: 8px; }
+}

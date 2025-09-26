@@ -1,0 +1,144 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+/* Container */
+.container {
+    max-width: 600px;
+    width: 100%;
+    margin-top: 25px;
+    background: #fff;
+    padding: 40px;
+    border-radius: 18px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    position: relative;
+    animation: slideUp 0.8s ease-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+}
+
+/* Title */
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Input Fields */
+form input[type="text"],
+form input[type="file"] {
+    width: 100%;
+    padding: 14px 16px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+form input[type="text"]:focus,
+form input[type="file"]:focus {
+    border-color: #6c63ff;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 8px rgba(108,99,255,0.4);
+    transform: scale(1.02);
+}
+
+/* Submit Button */
+form button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+form button:hover {
+    background: linear-gradient(90deg, #5a67d8, #6b46c1);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* Back Button */
+.back-btn {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: bold;
+    color: #555;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    padding: 8px 14px;
+    border-radius: 10px;
+    background: #f1f1f1;
+}
+
+.back-btn img {
+    width: 22px;
+    height: 22px;
+    margin-right: 6px;
+    transition: transform 0.3s ease;
+}
+
+.back-btn:hover {
+    color: #fff;
+    background: linear-gradient(90deg, #ff758c, #ff7eb3);
+    transform: translateX(-5px);
+}
+
+.back-btn:hover img {
+    transform: rotate(-15deg);
+}
+
+/* Messages */
+.message {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 10px;
+    animation: fadeIn 0.6s ease-in-out;
+}
+.error { color: #fff; background: #e74c3c; }
+.success { color: #fff; background: #28a745; }
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}

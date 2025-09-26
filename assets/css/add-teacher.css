@@ -1,0 +1,117 @@
+/* === General Reset === */
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* === Body Styling === */
+body {
+    background: linear-gradient(135deg, #89f7fe, #66a6ff); /* soft blue gradient */
+    min-height: 100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+/* === Container Card === */
+.container {
+    position: relative;
+    background: #ffffffcc; /* semi-transparent */
+    padding: 50px 30px 30px 30px;
+    width: 100%;
+    max-width: 550px;
+    border-radius: 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    border: 1px solid #f0f0f0;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* === Fade In Animation === */
+@keyframes fadeIn {
+    0% {opacity:0; transform: translateY(-20px);}
+    100% {opacity:1; transform: translateY(0);}
+}
+
+/* === Back Button === */
+.back-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: bold;
+    color: #555;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.back-btn img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.back-btn:hover {
+    color: #ff9aa2;
+    transform: translateX(-3px);
+}
+
+/* === Headings === */
+h2 {
+    text-align:center;
+    margin-bottom:30px;
+    font-size:2rem;
+    font-weight:700;
+    color: #1e3c72;
+}
+
+/* === Form Inputs === */
+form input, form select {
+    width:100%;
+    padding:14px 15px;
+    margin-bottom:18px;
+    border-radius:12px;
+    border:1px solid #ccc;
+    font-size:15px;
+    transition: all 0.3s ease;
+    background: #fefefe;
+}
+
+form input:focus, form select:focus {
+    border-color: #66a6ff;
+    box-shadow: 0 0 12px rgba(102,166,255,0.4);
+    outline: none;
+}
+
+/* === Submit Button === */
+button.add {
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:12px;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color:#fff;
+    font-weight:600;
+    font-size:16px;
+    cursor:pointer;
+    transition: all 0.3s ease;
+}
+
+button.add:hover {
+    background: linear-gradient(135deg, #2a5298, #1e3c72);
+    transform: translateY(-3px);
+    box-shadow:0 10px 25px rgba(30,60,114,0.4);
+}
+
+/* Responsive */
+@media(max-width:600px){
+    .container{
+        padding: 40px 20px 30px 20px;
+    }
+    h2{ font-size:1.7rem; }
+    .back-btn{ font-size:14px; padding:8px 12px;}
+}

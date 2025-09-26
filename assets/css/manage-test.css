@@ -1,0 +1,215 @@
+
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+   
+    
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* Main container */
+.container {
+    margin: 0 0;
+    max-width: 1600px;
+    position: relative;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+/* Back button */
+.back-btn {
+    position: absolute;
+    margin-top: 15px;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: bold;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+.back-btn img {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+}
+.back-btn:hover {
+    background: #fff;
+    color: #2575fc;
+    transform: translateX(-3px);
+}
+
+/* Headings */
+h2 {
+    text-align: center;
+    color: #ffb700;
+    margin-bottom: 40px;
+    margin-top: 100px;
+    font-weight: 700;
+    text-shadow: 1px 1px 8px rgba(0,0,0,0.4);
+}
+
+/* Card for form */
+.card {
+    border-radius: 20px;
+    padding: 25px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+}
+
+/* Inputs */
+
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh; /* সবসময় মাঝখানে রাখবে */
+    background: transparent; /* সুন্দর gradient */
+    padding: 20px;
+}
+
+.form-container .card {
+    width: 100%;
+    max-width: 700px;  /* ফর্মের সর্বোচ্চ সাইজ */
+    background: #fff;
+    border-radius: 16px;
+    padding: 25px 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    animation: fadeInUp 0.6s ease;
+}
+
+.form-container h5 {
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-container label {
+    font-weight: 600;
+    color: #444;
+}
+
+.form-control {
+    border-radius: 10px;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #2575fc;
+    box-shadow: 0 0 8px rgba(37,117,252,0.4);
+    transform: scale(1.02);
+}
+
+.btn {
+    border-radius: 10px;
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border: none;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.btn-secondary {
+    border-radius: 10px;
+}
+
+/* ফর্মে সুন্দর এনিমেশন */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Buttons */
+.btn {
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+.btn-primary:hover { background: #2575fc; transform: scale(1.05);}
+.btn-warning:hover { background: #ffb700; transform: scale(1.05); color: #000;}
+.btn-danger:hover { background: #ff4c4c; transform: scale(1.05);}
+.btn-secondary:hover { background: #6c757d; transform: scale(1.05);}
+
+/* Table Section */
+.table-card {
+    max-width: 1100px;   /* 🔹 ছোট সাইজ করা হলো */
+    margin: 0 auto;
+    margin-top: 50px;
+    border-radius: 20px;
+    margin-bottom: 150px;
+    padding: 15px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.table-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+}
+
+/* Table */
+.table {
+    font-size: 14px;   /* 🔹 টেবিল ছোট করা হলো */
+}
+table.table th {
+    background: #4a90e2;
+    color: #fff;
+    text-align: center;
+}
+table.table td {
+    text-align: center;
+    vertical-align: middle;
+}
+table.table tr:hover {
+    background: rgba(37,117,252,0.1);
+}
+
+/* Message */
+.message {
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 600;
+    color: #2575fc;
+}
+
+@media (max-width: 768px) {
+    .form-container, .table-card {
+        margin: 20px;
+    }
+}

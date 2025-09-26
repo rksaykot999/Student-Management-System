@@ -1,0 +1,125 @@
+/* === Global === */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* === Container === */
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    background: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+    position: relative;
+    animation: slideUp 0.8s ease-out;
+}
+
+/* === Heading === */
+.container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 26px;
+    font-weight: 700;
+    color: #333;
+    background: linear-gradient(90deg, #2193b0, #6dd5ed);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* === Back Button === */
+.back-btn {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    color: #444;
+    background: #f1f1f1;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: linear-gradient(90deg, #ff758c, #ff7eb3);
+    color: #fff;
+    transform: translateX(-4px);
+}
+
+/* === Current Image === */
+.current-img {
+    display: block;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    margin: 10px 0 20px;
+    border-radius: 50%;
+    border: 3px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+.current-img:hover {
+    transform: scale(1.05);
+}
+
+/* === Input Fields === */
+form input[type="text"],
+form input[type="email"],
+form input[type="file"] {
+    width: 100%;
+    padding: 14px 16px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: 0.3s;
+    background: #fafafa;
+}
+
+form input:focus {
+    border-color: #2193b0;
+    outline: none;
+    background: #fff;
+    box-shadow: 0 0 6px rgba(33,147,176,0.4);
+    transform: scale(1.02);
+}
+
+/* === Submit Button === */
+form button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #2193b0, #6dd5ed);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+form button:hover {
+    background: linear-gradient(90deg, #1a7c91, #4fc3d6);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* === Animation === */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+

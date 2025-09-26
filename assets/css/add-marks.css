@@ -1,0 +1,184 @@
+  * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    /* === Body Styling === */
+    body {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        min-height: 100vh;
+        padding: 40px;
+        color: #333;
+    }
+
+    /* === Back Button === */
+    .back-btn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        font-weight: bold;
+        color: #fff;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: rgba(0,0,0,0.2);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        z-index: 100;
+    }
+    .back-btn img {
+        width: 20px;
+        height: 20px;
+        margin-right: 6px;
+    }
+    .back-btn:hover {
+        background: rgba(255,255,255,0.2);
+        transform: translateX(-5px) scale(1.05);
+        color: #ff9aa2;
+    }
+
+    /* === Heading === */
+    h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #fff;
+        text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+        font-size: 2rem;
+        animation: fadeInDown 0.8s ease forwards;
+    }
+
+    @keyframes fadeInDown {
+        0% { opacity: 0; transform: translateY(-20px);}
+        100% { opacity: 1; transform: translateY(0);}
+    }
+
+    /* === Form Styling === */
+    form {
+        background: rgba(255,255,255,0.95);
+        padding: 25px;
+        border-radius: 15px;
+        max-width: 900px;
+        margin: 20px auto;
+        box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+        animation: fadeIn 0.8s ease forwards;
+    }
+
+    input[type="text"], input[type="number"], select {
+        width: 100%;
+        padding: 12px 15px;
+        margin: 10px 0 20px 0;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    input[type="text"]:focus, input[type="number"]:focus, select:focus {
+        border-color: #2575fc;
+        box-shadow: 0 0 12px rgba(37,117,252,0.5);
+        outline: none;
+    }
+
+    /* === Buttons === */
+    button, .btn-edit, .btn-delete {
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        color: #fff;
+        background: linear-gradient(90deg, #6a11cb, #2575fc);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    button:hover {
+        background: linear-gradient(90deg, #2575fc, #6a11cb);
+        transform: scale(1.05);
+    }
+
+    /* === Search Bar === */
+    .search-bar {
+        max-width: 500px;
+        margin: 20px auto;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+    .search-bar input[type="text"] {
+        flex: 1;
+    }
+    .search-bar button {
+        flex: 0;
+        padding: 12px 20px;
+        background: #4a90e2;
+    }
+    .search-bar button:hover {
+        background: #2575fc;
+    }
+
+    /* === Table Styling === */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 30px;
+        background: rgba(255,255,255,0.95);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    th, td {
+        padding: 12px 15px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+        transition: all 0.3s ease;
+    }
+    th {
+        background: #4a90e2;
+        color: #fff;
+        font-weight: 600;
+    }
+    tr:hover {
+        background: rgba(37,117,252,0.1);
+        transform: scale(1.01);
+    }
+
+    /* === Action Buttons === */
+    .btn-edit {
+        background: #28a745;
+        padding: 6px 12px;
+        border-radius: 6px;
+        color: #fff;
+        text-decoration: none;
+    }
+    .btn-edit:hover {
+        transform: scale(1.1);
+        background: #218838;
+    }
+    .btn-delete {
+        background: #dc3545;
+        padding: 6px 12px;
+        border-radius: 6px;
+        color: #fff;
+        text-decoration: none;
+    }
+    .btn-delete:hover {
+        transform: scale(1.1);
+        background: #c82333;
+    }
+
+    /* === Responsive === */
+    @media (max-width:600px){
+        form, table{width:95%;}
+        h2{font-size:1.5rem;}
+        th, td{padding:10px 8px;}
+        .back-btn{font-size:14px; padding:6px 10px;}
+    }

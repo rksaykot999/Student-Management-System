@@ -1,0 +1,168 @@
+/* === General Reset === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* === Body Styling === */
+body {
+    background: linear-gradient(135deg, #a8edea, #fed6e3); /* pastel minty-pink gradient */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* === Container Card === */
+.container {
+    background: #ffffffcc; /* slightly transparent white for soft look */
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    animation: fadeIn 0.8s ease-in-out;
+    border: 1px solid #f0f0f0;
+}
+
+/* === Fade In Animation === */
+@keyframes fadeIn {
+    0% {opacity: 0; transform: translateY(-20px);}
+    100% {opacity: 1; transform: translateY(0);}
+}
+
+/* === Back Button === */
+.back-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: bold;
+    color: #555;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.back-btn img {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.back-btn:hover {
+    color: #ff9aa2;
+    transform: translateX(-3px);
+}
+
+/* === Headings === */
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ff9aa2; /* soft pink heading */
+}
+
+/* === Error Message === */
+.error {
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #e74c3c;
+}
+
+/* === Form Inputs === */
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #555;
+}
+
+form input[type="text"],
+form textarea {
+    width: 100%;
+    padding: 14px 15px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: #fefefe;
+}
+
+form input[type="text"]:focus,
+form textarea:focus {
+    border-color: #a8edea;
+    box-shadow: 0 0 12px rgba(168, 237, 234, 0.4);
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+    height: 120px;
+}
+
+/* === Buttons === */
+.btn {
+    width: 48%;
+    padding: 14px 0;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+    font-size: 15px;
+}
+
+/* Submit Button */
+.btn-submit {
+    background: linear-gradient(135deg, #a8edea, #ffdde1); /* pastel gradient */
+    color: #555;
+    box-shadow: 0 6px 15px rgba(168,237,234,0.3);
+}
+
+.btn-submit:hover {
+    background: linear-gradient(135deg, #ffdde1, #a8edea);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(168,237,234,0.4);
+}
+
+/* Cancel Button */
+.btn-cancel {
+    background: #f7f7f7;
+    color: #555;
+    border: 1px solid #ddd;
+}
+
+.btn-cancel:hover {
+    background: #e6e6e6;
+    transform: translateY(-2px);
+}
+
+/* Button Container Flex */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Responsive */
+@media(max-width: 500px) {
+    .container {
+        padding: 30px 20px;
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 12px 0;
+    }
+}

@@ -1,0 +1,121 @@
+/* ===== Background ===== */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===== Container Card ===== */
+.container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 15px;
+    padding: 35px 40px;
+    width: 430px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    color: #fff;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+/* ===== Heading ===== */
+h2 {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* ===== Labels ===== */
+label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 500;
+    color: #ffe6e6;
+}
+
+/* ===== Input & Select & Textarea ===== */
+input[type="text"], select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    transition: 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    transform: scale(1.02);
+    border: 2px solid #ffb347;
+}
+
+/* ===== Button ===== */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #ff9966, #ff5e62);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #ff5f6d, #ffc371);
+    transform: scale(1.05);
+}
+
+/* ===== Error Message ===== */
+.error {
+    color: #ffdddd;
+    background: rgba(255, 0, 0, 0.4);
+    padding: 8px;
+    border-radius: 6px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* ===== Back Button ===== */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+}
+
+.back-btn img {
+    width: 18px;
+    height: 18px;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.05);
+}
+
+/* ===== FadeIn Animation ===== */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(-20px);}
+    to {opacity: 1; transform: translateY(0);}
+}
+

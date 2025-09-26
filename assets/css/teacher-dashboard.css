@@ -1,0 +1,182 @@
+/* ===== Body & General ===== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f7;
+    margin: 0;
+    padding: 0;
+}
+h3 {
+    color: #1abc9c;
+    margin-bottom: 15px;
+}
+
+/* ===== Teacher Profile Card ===== */
+.teacher-profile {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: linear-gradient(135deg, #ffffff, #e0f7fa);
+    padding: 20px 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    max-width: 650px;
+    margin: 30px auto;
+    transition: all 0.3s ease;
+}
+.teacher-profile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+}
+.teacher-profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid #1abc9c;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.teacher-profile:hover img {
+    transform: scale(1.08) rotate(3deg);
+}
+.teacher-details h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #2c3e50;
+}
+.teacher-details p {
+    margin: 5px 0;
+    font-size: 15px;
+    color: #555;
+}
+.teacher-details strong {
+    color: #1abc9c;
+}
+
+/* ===== Dashboard Summary Boxes ===== */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 30px auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+.summary-box {
+    flex: 1 1 250px;
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+    color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.summary-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+.summary-box h2 {
+    font-size: 2.2rem;
+    margin-bottom: 5px;
+}
+.summary-box p {
+    font-size: 16px;
+}
+
+/* ===== Section Cards ===== */
+.students-section, .marks-section, .notice-section, .teacher-section {
+    width: 100%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.students-section:hover, .marks-section:hover, .notice-section:hover, .teacher-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* ===== Tables ===== */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+table th, table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    vertical-align: middle;
+}
+table th {
+    background: #1abc9c;
+    color: #fff;
+}
+table td img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+table td img:hover {
+    transform: scale(1.2);
+    box-shadow: 0 5px 15px rgba(26,188,156,0.4);
+}
+
+/* ===== Buttons ===== */
+button.edit {
+    background: #f1c40f;
+    color: #fff;
+    transition: 0.3s;
+}
+button.edit:hover { background: #d4ac0d; }
+button.delete {
+    background: #e74c3c;
+    color: #fff;
+    transition: 0.3s;
+}
+button.delete:hover { background: #c0392b; }
+button.add {
+    background: #1abc9c;
+    color: #fff;
+    transition: 0.3s;
+    margin-bottom: 10px;
+}
+button.add:hover { background: #16a085; }
+.logout-btn {
+    padding: 8px 15px;
+    background: #e74c3c;
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    float: right;
+}
+.logout-btn:hover { background: #c0392b; }
+
+/* ===== Accordions ===== */
+.accordion-button {
+    background: #1abc9c;
+    color: #fff;
+}
+.accordion-button:not(.collapsed) {
+    background: #16a085;
+}
+
+button { padding:5px 10px; border:none; border-radius:5px; cursor:pointer; transition:0.3s; }
+button.edit { background:#f1c40f; color:#fff; }
+button.edit:hover { background:#d4ac0d; }
+button.delete { background:#e74c3c; color:#fff; }
+button.delete:hover { background:#c0392b; }
+button.add { background:#1abc9c; color:#fff; }
+button.add:hover { background:#16a085; }
+.logout-btn { padding:10px 15px; background:#e74c3c; color:#fff; border:none; border-radius:5px; cursor:pointer; float:right; margin-bottom:10px; }
+.logout-btn:hover { background:#c0392b; }
+/* ===== Responsive ===== */
+@media(max-width:768px){
+    .dashboard-container { flex-direction: column; }
+    .teacher-profile { flex-direction: column; text-align: center; }
+    .teacher-profile img { margin: 0 auto; }
+    table th, table td { font-size: 14px; padding: 8px; }
+}
