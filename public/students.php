@@ -453,6 +453,46 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        const loginButton = document.getElementById('logoButton');
+        const loginDropdown = document.getElementById('loginDropdown');
+        const mobileMenuButton = document.getElementById('menuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLoginButton = document.getElementById('mobileLoginButton');
+
+        // Toggle the dropdown menu on button click
+        if (loginButton) {
+            loginButton.addEventListener('click', (event) => {
+                loginDropdown.classList.toggle('show');
+                event.stopPropagation();
+            });
+        }
+
+        // Hide the dropdown when clicking outside of it
+        window.addEventListener('click', (event) => {
+            if (!loginDropdown.contains(event.target) && loginButton && !loginButton.contains(event.target)) {
+                loginDropdown.classList.remove('show');
+            }
+        });
+
+        // Toggle mobile menu visibility
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('show');
+        });
+
+        // Toggle login dropdown for mobile button
+        mobileLoginButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            loginDropdown.classList.toggle('show');
+        });
+
+        // Hide mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('show');
+            });
+        });
+
         function openStudentModal(student) {
             const imgEl = document.getElementById('studentModalImg');
             const letterEl = document.getElementById('studentModalLetter');
